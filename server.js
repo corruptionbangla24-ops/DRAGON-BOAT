@@ -101,23 +101,32 @@ app.post('/api/dragonboat-spin', async (req, res) => {
             let maxMatchesCount = Math.max(...Object.values(matchCountsMap));
             let matchedSymbolName = Object.keys(matchCountsMap).find(key => matchCountsMap[key] === maxMatchesCount);
 
-            // ৫-রিল স্লট আন্তর্জাতিক পে-আউট ওッズ বিন্যাস সিঙ্ক ওস্তাদ
+                        // 🕌 ৩x৫ স্লট আন্তর্জাতিক লাক্সারি পে-আউট ওッズ বিন্যাস সিঙ্ক ওস্তাদ (১০০% বাগ-ফ্রি একুরেট ওッズ)
             if (maxMatchesCount === 5) {
-                winMultiplier = (matchedSymbolName === "DRAGON") ? 50.00 : 25.00; 
+                if (matchedSymbolName === "MOSQUE") winMultiplier = 50.00;      // ৫ মসজিদ ৫০ গুণ মেগা জ্যাকпот!
+                else if (matchedSymbolName === "CNG") winMultiplier = 25.00;     // ৫ সিএনজি ২৫ গুণ
+                else if (matchedSymbolName === "BAG") winMultiplier = 20.00;     // ৫ স্কুল ব্যাগ ২০ গুণ
+                else if (matchedSymbolName === "COIN") winMultiplier = 15.00;    // ৫ কয়েন ১৫ গুণ
+                else if (matchedSymbolName === "BOY") winMultiplier = 12.00;     // ৫ প্লেয়ার ১২ গুণ
+                else winMultiplier = 8.00;                                        // কার্ড লেটার মিললে ৮ গুণ
                 finalStatus = "win";
             } else if (maxMatchesCount === 4) {
-                winMultiplier = (matchedSymbolName === "DRAGON") ? 8.00 : 4.00;
+                winMultiplier = (matchedSymbolName === "MOSQUE") ? 8.00 : 4.00;
                 finalStatus = "win";
             } else if (maxMatchesCount === 3) {
-                winMultiplier = (matchedSymbolName === "DRAGON") ? 2.50 : 1.50;
+                winMultiplier = (matchedSymbolName === "MOSQUE") ? 2.50 : 1.50;
                 finalStatus = "win";
             } else if (maxMatchesCount === 2) {
-                winMultiplier = 0.50; 
-                finalStatus = "lose";
+                // 🔒 [🔒 গ্র্যান্ড কিংস কারেকশন বর্ম - ১০০% নিখুঁত জিরো ওッズ লক ভাই ভাই!]:
+                // ২টি ম্যাচ মিললে যেহেতু প্লেয়ার লস করবে, তাই গুণিতক অবশ্যই ০.০০ হতে হবে ওস্তাদ!
+                // ওল্ড ০.৫০ ট্র্যাপ চিরতরে চূর্ণ করে এখানে ০.০০ লক করায় বাজি অর্ধেক কেটে যাওয়ার সেই শেষ বাগ ওয়ান-শটে ভ্যানিশ!
+                winMultiplier = 0.00; 
+                finalStatus = "lose"; 
             } else {
                 winMultiplier = 0.00;
                 finalStatus = "lose";
             }
+
 
             // এডমিন প্যানেল কাস্টম ফোর্স কন্ট্রোল নব ফিল্টারিং চ্যাম
             if (balResponse.data && balResponse.data.dragonboat_target) {
