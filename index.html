@@ -192,11 +192,17 @@
             playAudio('click');
         }
 
-                // 🎰 [🎰 ৫-রিল হাই-স্পিড ক্যাসিনো শাফলিং ও স্পিনিং অ্যানিমেশন ইঞ্জিন ভাই ভাই]
+                 // 🎰 [🎰 ৫-রিল হাই-স্পিড ক্যাসিনো শাফলিং ও স্পিনিং অ্যানিমেশন ইঞ্জিন ভাই ভাই]
         function animateDragonBoatReelsSpinning(serverGameData) {
             playAudio('spin');
             
-            let matrixResult = serverGameData.finalReelsResultMatrix;
+            // 🔒 [মানি ট্রি ও ফ্যান-টান অবজেক্ট রিড বর্ম]: ডাটা রুটে বা পেটে যেখানেই থাকুক, ওয়ান-শটে নিখুঁত ক্যাচ ট্রিক!
+            let matrixResult = serverGameData.finalReelsResultMatrix || (serverGameData.gameData ? serverGameData.gameData.finalReelsResultMatrix : null);
+            
+            // যদি কোনো কারণে ডাটা মিসিং হয়, তবে ফলব্যাক ডিফল্ট ড্রাগন সেটেলমেন্ট বর্ম
+            if (!matrixResult || !Array.isArray(matrixResult)) {
+                matrixResult = ["DRAGON", "DRAGON", "DRAGON", "DRAGON", "DRAGON"];
+            }
 
             // ৫টি রিলকে ক্রমানুসারে আলাদা আলাদা টাইমিং ফ্রেমে স্পিন ব্লার মোড একটিভেট লক ওস্তাদ!
             for (let i = 0; i < 5; i++) {
@@ -219,16 +225,16 @@
                         
                         // পপিং ড্রপ এনিমেশন ইফেক্ট
                         frame.style.transform = "scale(0.8)";
-                        setTimeout(() => frame.style.transform = "scale(1)", 80);
+                        setTimeout(() => { if(frame) frame.style.transform = "scale(1)"; }, 80);
                     }
                     playAudio('click');
                     reelIndex++;
                 } else {
                     clearInterval(stopInterval);
                     
-                    if (serverGameData.balance !== undefined) {
-                        balance = parseFloat(serverGameData.balance);
-                    }
+                    let parsedBal = serverGameData.balance !== undefined ? serverGameData.balance : (serverGameData.data ? serverGameData.data.balance : balance);
+                    if (parsedBal !== undefined) balance = parseFloat(parsedBal);
+                    
                     showFinalDragonBoatReward(serverGameData.status, serverGameData.winMultiplier, serverGameData.winAmount);
                 }
             }, 350); // ৩৫০ মিলি-সেকেন্ডের লাক্সারি রিল ক্লিফিং এলাইনমেন্ট লক
@@ -240,7 +246,7 @@
             isSpinning = true;
             if (document.getElementById("spin-btn")) document.getElementById("spin-btn").disabled = true;
             if (document.getElementById("win-status-box")) document.getElementById("win-status-box").className = "win-status-container";
-            if (document.getElementById("win-text-msg")) document.getElementById("win-text-msg").innerText = "🎰 ۵-রিল ড্রাগন রেসিং শাফলিং করা হচ্ছে... পে-লাইন ম্যাচিংয়ের অপেক্ষা ওস্তাদ...";
+            if (document.getElementById("win-text-msg")) document.getElementById("win-text-msg").innerText = "🎰 ৫-রিল ড্রাগন রেসিং শাফলিং করা হচ্ছে... পে-লাইন ম্যাচিংয়ের অপেক্ষা ওস্তাদ...";
             playAudio('click');
 
             try {
@@ -352,12 +358,18 @@
             click: new Audio('spin2.mp3'), spin: new Audio('spin2.mp3'),
             win: new Audio('win2.mp3'), wheel: new Audio('spin2.mp3')
         };
-        Object.values(slotSounds).forEach(s => s.load());
+        Object.values(slotSounds).forEach(s => { s.load(); s.muted = true; }); // 🔒 অডিও ক্র্যাশ ব্লকার সেফটি নব লক ওস্তাদ!
 
         function playAudio(type) {
-            try { slotSounds[type].currentTime = 0; slotSounds[type].play(); } catch(e) {}
+            try { 
+                if(slotSounds[type]) {
+                    slotSounds[type].muted = false;
+                    slotSounds[type].currentTime = 0; 
+                    slotSounds[type].play().catch(e => {}); 
+                }
+            } catch(e) {}
         }
     </script>
 </body>
 </html>
-
+       
