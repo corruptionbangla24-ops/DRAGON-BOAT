@@ -192,11 +192,11 @@
             playAudio('click');
         }
 
-                 // 🎰 [🎰 ৫-রিল হাই-স্পিড ক্যাসিনো শাফলিং ও স্পিনিং অ্যানিমেশন ইঞ্জিন ভাই ভাই]
+                    // 🎰 [🎰 ৫-রিল হাই-স্পিড ক্যাসিনো শাফলিং ও স্পিনিং অ্যানিমেশন ইঞ্জিন ভাই ভাই]
         function animateDragonBoatReelsSpinning(serverGameData) {
             playAudio('spin');
             
-            // 🔒 [মানি ট্রি ও ফ্যান-টান অবজেক্ট রিড বর্ম]: ডাটা রুটে বা পেটে যেখানেই থাকুক, ওয়ান-শটে নিখুঁত ক্যাচ ট্রিক!
+            // 🔒 [গ্র্যান্ড কিংস কারেকশন ট্রিক]: ওল্ড ডাটা ক্যাচিং ট্র্যাপ কেটে সরাসরি মানি ট্রি ফরম্যাটে ডাটা রিড বর্ম লক ওস্তাদ!
             let matrixResult = serverGameData.finalReelsResultMatrix || (serverGameData.gameData ? serverGameData.gameData.finalReelsResultMatrix : null);
             
             // যদি কোনো কারণে ডাটা মিসিং হয়, তবে ফলব্যাক ডিফল্ট ড্রাগন সেটেলমেন্ট বর্ম
@@ -209,6 +209,7 @@
                 const frame = document.getElementById(`sym-frame-${i}`);
                 if (frame) frame.className = "symbol-img-frame reel-spinning-blur";
             }
+     
 
             // ক্যাসিনো স্ট্যান্ডার্ড অনুসারে বাম থেকে ডানে ১টি ১টি করে রিল লক বা থামার এনিমেশন মেমোরি
             let reelIndex = 0;
